@@ -165,7 +165,10 @@ class User {
     }
 
     const { setCols, values } = sqlForPartialUpdate( //destructuring for a more organized DB query and set to that particular (partial) query
+    //putting data (req.body) as the first parameter puts the keys in the array in this function set as setCols
         data,
+
+    //by putting this object in the second parameter, these values are extracted and put in an array
         {
           firstName: "first_name",
           lastName: "last_name",

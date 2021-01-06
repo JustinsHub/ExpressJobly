@@ -19,8 +19,8 @@ class Company {
   static async create({ handle, name, description, numEmployees, logoUrl }) {
     const duplicateCheck = await db.query(
           `SELECT handle
-           FROM companies
-           WHERE handle = $1`,
+          FROM companies
+          WHERE handle = $1`,
         [handle]);
 
     if (duplicateCheck.rows[0])
@@ -28,9 +28,9 @@ class Company {
 
     const result = await db.query(
           `INSERT INTO companies
-           (handle, name, description, num_employees, logo_url)
-           VALUES ($1, $2, $3, $4, $5)
-           RETURNING handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl"`,
+          (handle, name, description, num_employees, logo_url)
+          VALUES ($1, $2, $3, $4, $5)
+          RETURNING handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl"`,
         [
           handle,
           name,
@@ -56,8 +56,8 @@ class Company {
                   description,
                   num_employees AS "numEmployees",
                   logo_url AS "logoUrl"
-           FROM companies
-           ORDER BY name`);
+          FROM companies
+          ORDER BY name`);
     return companiesRes.rows;
   }
 
@@ -76,8 +76,8 @@ class Company {
                   description,
                   num_employees AS "numEmployees",
                   logo_url AS "logoUrl"
-           FROM companies
-           WHERE handle = $1`,
+          FROM companies
+          WHERE handle = $1`,
         [handle]);
 
     const company = companyRes.rows[0];
@@ -132,9 +132,9 @@ class Company {
   static async remove(handle) {
     const result = await db.query(
           `DELETE
-           FROM companies
-           WHERE handle = $1
-           RETURNING handle`,
+          FROM companies
+          WHERE handle = $1
+          RETURNING handle`,
         [handle]);
     const company = result.rows[0];
 
