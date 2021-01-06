@@ -30,8 +30,8 @@ class User {
                   last_name AS "lastName",
                   email,
                   is_admin AS "isAdmin"
-           FROM users
-           WHERE username = $1`,
+          FROM users
+          WHERE username = $1`,
         [username],
     );
 
@@ -60,8 +60,8 @@ class User {
       { username, password, firstName, lastName, email, isAdmin }) {
     const duplicateCheck = await db.query(
           `SELECT username
-           FROM users
-           WHERE username = $1`,
+          FROM users
+          WHERE username = $1`,
         [username],
     );
 
@@ -73,14 +73,14 @@ class User {
 
     const result = await db.query(
           `INSERT INTO users
-           (username,
+          (username,
             password,
             first_name,
             last_name,
             email,
             is_admin)
-           VALUES ($1, $2, $3, $4, $5, $6)
-           RETURNING username, first_name AS "firstName", last_name AS "lastName", email, is_admin AS "isAdmin"`,
+          VALUES ($1, $2, $3, $4, $5, $6)
+          RETURNING username, first_name AS "firstName", last_name AS "lastName", email, is_admin AS "isAdmin"`,
         [
           username,
           hashedPassword,
@@ -164,7 +164,7 @@ class User {
       data.password = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR);
     }
 
-    const { setCols, values } = sqlForPartialUpdate(
+    const { setCols, values } = sqlForPartialUpdate( //destructuring for a more organized DB query and set to that particular (partial) query
         data,
         {
           firstName: "first_name",
@@ -174,14 +174,14 @@ class User {
     const usernameVarIdx = "$" + (values.length + 1);
 
     const querySql = `UPDATE users 
-                      SET ${setCols} 
+                      SET ${setCols}
                       WHERE username = ${usernameVarIdx} 
                       RETURNING username,
                                 first_name AS "firstName",
                                 last_name AS "lastName",
                                 email,
                                 is_admin AS "isAdmin"`;
-    const result = await db.query(querySql, [...values, username]);
+    const result = await db.query(querySql, [...values, username]); //sanitizing
     const user = result.rows[0];
 
     if (!user) throw new NotFoundError(`No user: ${username}`);
@@ -195,9 +195,9 @@ class User {
   static async remove(username) {
     let result = await db.query(
           `DELETE
-           FROM users
-           WHERE username = $1
-           RETURNING username`,
+          FROM users
+          WHERE username = $1
+          RETURNING username`,
         [username],
     );
     const user = result.rows[0];
